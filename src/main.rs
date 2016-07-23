@@ -1,5 +1,8 @@
+extern crate summer_proj;
+
 use std::io::{Stdin, Write};
 use std::net::{TcpListener, TcpStream};
+use summer_proj::ReadlineForTcpStream;
 use std::thread;
 use std::net::SocketAddr;
 use std::io::Read;
@@ -9,25 +12,7 @@ use std::fmt;
 //use::std::time::Duration
 //is for sleeps
 
-trait READLINE_FOR_TCPSTREAM { 
-    fn read_line(&mut self, buf: &mut String) -> usize;
-}
-
-impl READLINE_FOR_TCPSTREAM for TcpStream {
-    fn read_line(&mut self, buf: &mut String) -> usize{       //reading until new line
-        let mut temp: [u8;1] = [0;1];
-        let mut READEN = 0;
-        self.read_exact(&mut temp);
-        while (temp[0] != 10) {
-            READEN+=1;
-            (*buf).push(temp[0] as char);
-            self.read_exact(&mut temp);
-            //println!("{}", buf);    
-        }
-        READEN
-        //println!("{}", temp[0] as char);
-    }
-}
+//use summer_proj::ReadlineForTcpStream;
 
 fn main() {
     let SERVER = TcpListener::bind("127.0.0.1:31337").unwrap();
@@ -42,7 +27,7 @@ fn main() {
                       And it took - {} bytes", buffer.clone(), stream.read_line(&mut buffer));
             //stream.read_to_end(&mut buffer).unwrap();
             //println!(format!("{}", buffer.as_slice()));
-            //stream.write(format!("YOU WROTE: {}", buffer));            
+            //stream.write(format!("YOU WROTE: {}", buffer));
         });
     }
 }
