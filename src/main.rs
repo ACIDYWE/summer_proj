@@ -23,8 +23,8 @@ fn main() {
             let mut buffer = String::new();
             stream.write(b"Hello pidr!\n");
             println!("Got connection from: {}", stream.peer_addr().unwrap()); //for Admin
-            println!("Some user wrote this: {}\n\
-                      And it took - {} bytes", buffer.clone(), stream.read_line(&mut buffer));
+            println!("Another message took: {} bytes\n\
+                      And here it is : \"{}\"", stream.read_line(&mut buffer), buffer.clone());
             //stream.read_to_end(&mut buffer).unwrap();
             //println!(format!("{}", buffer.as_slice()));
             //stream.write(format!("YOU WROTE: {}", buffer));
