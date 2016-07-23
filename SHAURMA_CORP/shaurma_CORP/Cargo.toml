@@ -1,0 +1,6 @@
+[package]
+name = "shaurma_CORP"
+version = "0.1.0"
+authors = ["mostobriv"]
+
+[dependencies]
