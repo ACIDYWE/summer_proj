@@ -1,4 +1,17 @@
 use std::net::TcpStream;
-pub trait Page {
-    fn process(&self, _: &mut TcpStream);
+use ::ReadlineForTcpStream;
+
+pub struct Page<'a> { process_fn: &'a Fn(&mut TcpStream)->() }
+
+impl<'a> Page<'a>
+{
+    pub fn new ( f: &'a Fn(&mut TcpStream)->() ) -> Page
+    {
+        Page{ process_fn: f }
+    }
+
+    pub fn process(&mut self, stream: &mut TcpStream) -> ()
+    {
+        (*self.process_fn)(stream);
+    }
 }

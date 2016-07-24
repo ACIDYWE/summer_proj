@@ -1,6 +1,6 @@
-mod page;
+pub mod page;
 
-pub use std::net::TcpStream;
+use std::net::TcpStream;
 use std::io::Read;
 
 pub trait ReadlineForTcpStream {
@@ -15,8 +15,8 @@ impl ReadlineForTcpStream for TcpStream {
         while temp[0] != 10 {
             READEN+=1;
             (*buf).push(temp[0] as char);
-            self.read_exact(&mut temp);
-            //println!("{}", buf);
+            self.read_exact(&mut temp).unwrap();
+            println!("{}", buf);
         }
         READEN
         //println!("{}", temp[0] as char);

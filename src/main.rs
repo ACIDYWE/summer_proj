@@ -9,6 +9,8 @@ use std::io::Read;
 use std::vec::Vec;
 use std::fmt;
 
+use summer_proj::page::*;
+
 //use::std::time::Duration
 //is for sleeps
 
@@ -17,17 +19,26 @@ use std::fmt;
 fn main() {
     let SERVER = TcpListener::bind("127.0.0.1:31337").unwrap();
     println!("SERVER STARTED!");
+
     for stream in SERVER.incoming() {
-        thread::spawn( || {
+        thread::spawn(move || {
+            let main_page = move |stream: &mut TcpStream| {
+                let mut buffer = String::new();
+                stream.write(b"Hello pidr!\n");
+
+                let count = stream.read_line(&mut buffer);
+                println!("Got connection from: {}", stream.peer_addr().unwrap()); //for Admin
+                println!("Some user wrote this: {}\n\
+                          And it took - {} bytes", buffer.clone(), count);
+
+                //stream.read_to_end(&mut buffer).unwrap();
+                //println!(format!("{}", buffer.as_slice()));
+                //stream.write(format!("YOU WROTE: {}", buffer));
+            };
+            let mut main_page = Page::new(&main_page);
+
             let mut stream = stream.unwrap();
-            let mut buffer = String::new();
-            stream.write(b"Hello pidr!\n");
-            println!("Got connection from: {}", stream.peer_addr().unwrap()); //for Admin
-            println!("Another message took: {} bytes\n\
-                      And here it is : \"{}\"", stream.read_line(&mut buffer), buffer.clone());
-            //stream.read_to_end(&mut buffer).unwrap();
-            //println!(format!("{}", buffer.as_slice()));
-            //stream.write(format!("YOU WROTE: {}", buffer));
+            main_page.process(&mut stream);
         });
     }
 }
