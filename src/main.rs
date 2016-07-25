@@ -15,6 +15,11 @@ use summer_proj::page::Page;
 fn main() {
     let server = TcpListener::bind("127.0.0.1:31337").unwrap();
     println!("SERVER STARTED!");
+    pritln!("**********************\n\
+             *                    *\n\
+             *     ADMIN PANEL    *\n\
+             *                    *\n\
+             **********************\n\n");
 
     for stream in server.incoming() {
         thread::spawn(move || {
