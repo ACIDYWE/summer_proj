@@ -27,13 +27,13 @@ pub fn main_page (stream: &mut TcpStream)
                 let price_list = Page::new(price_list);
                 price_list.load_for(stream);
             },
-            '2' => {stream.write(b"your select \"Buy\", but IDITE HAHUI\n").unwrap();},
-            '3' => {stream.write(b"your select \"Check your luck\", but IDITE HAHUI\n").unwrap();},
+            '2' => {stream.write(b"You'r selected \"Buy\", but IDITE HAHUI\n").unwrap();},
+            '3' => {stream.write(b"You'r selected \"Check your luck\", but IDITE HAHUI\n").unwrap();},
             '4' => {
-                stream.write(b"your select \"Exit\", then IDITE HAHUI\n").unwrap();
+                stream.write(b"You'r selected \"Exit\", then IDITE HAHUI\n").unwrap();
                 panic!("Kakoito pidor vyshel"); // he he he, bydlo-style mod true
             },
-            _ => {stream.write(b"your select smth shit, but IDITE HAHUI\n").unwrap();}
+            _ => {stream.write(b"You'r selected smth shit, but IDITE HAHUI\n").unwrap();}
         };
     };
 
