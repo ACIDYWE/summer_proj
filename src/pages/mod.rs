@@ -1,3 +1,3 @@
 mod main;
 
-pub use self::main::MainPage;
+pub use self::main::main_page as MainPage;

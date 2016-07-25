@@ -9,16 +9,15 @@ pub trait ReadlineForTcpStream {
 }
 
 impl ReadlineForTcpStream for TcpStream {
-    fn read_line(&mut self, buf: &mut String) -> Option<usize> {       //reading until new line
+    fn read_line(&mut self, buf: &mut String) -> Option<usize> {      //reading until new line
         let mut temp: [u8;1] = [0;1];
-        let mut READEN = 0;
-        self.read_exact(&mut temp);
+        let mut readen = 0;
+        self.read_exact(&mut temp).unwrap();
         while temp[0] != 10 {
-            READEN+=1;
+            readen+=1;
             (*buf).push(temp[0] as char);
             self.read_exact(&mut temp).unwrap();
         }
-        Some(READEN)
-        //println!("{}", temp[0] as char);
+        Some(readen)
     }
 }

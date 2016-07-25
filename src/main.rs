@@ -1,13 +1,9 @@
 extern crate summer_proj;
 
-use std::io::{Stdin, Write};
-use std::net::{TcpListener, TcpStream};
+use std::io::{Read, Write};
+use std::net::TcpListener;
 use summer_proj::ReadlineForTcpStream;
 use std::thread;
-use std::net::SocketAddr;
-use std::io::Read;
-use std::vec::Vec;
-use std::fmt;
 
 use summer_proj::page::*;
 
@@ -17,10 +13,10 @@ use summer_proj::page::*;
 //use summer_proj::ReadlineForTcpStream;
 
 fn main() {
-    let SERVER = TcpListener::bind("127.0.0.1:31337").unwrap();
+    let server = TcpListener::bind("127.0.0.1:31337").unwrap();
     println!("SERVER STARTED!");
 
-    for stream in SERVER.incoming() {
+    for stream in server.incoming() {
         thread::spawn(move || {
             let mut stream = stream.unwrap();
 

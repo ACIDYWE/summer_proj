@@ -2,7 +2,7 @@ use std::net::TcpStream;
 use std::io::Write;
 use ::ReadlineForTcpStream;
 
-pub fn MainPage (stream: &mut TcpStream)
+pub fn main_page (stream: &mut TcpStream)
 {
     stream.write(b"Hello pidr!\n").unwrap();
     stream.write(b"Wellcome to SHAWERMA\n").unwrap();
@@ -14,7 +14,7 @@ pub fn MainPage (stream: &mut TcpStream)
     stream.write(b"4. Exit\n").unwrap();
 
     loop {
-        stream.write(b"\n> ");
+        stream.write(b"\n> ").unwrap();
         let mut buffer = String::new();
         let len = stream.read_line(&mut buffer).unwrap();
         if len != 1 {continue}
