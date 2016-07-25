@@ -22,22 +22,13 @@ fn main() {
 
     for stream in SERVER.incoming() {
         thread::spawn(move || {
-            let main_page = move |stream: &mut TcpStream| {
-                let mut buffer = String::new();
-                stream.write(b"Hello pidr!\n");
-
-                let count = stream.read_line(&mut buffer);
-                println!("Got connection from: {}", stream.peer_addr().unwrap()); //for Admin
-                println!("Some user wrote this: {}\n\
-                          And it took - {} bytes", buffer.clone(), count);
-
-                //stream.read_to_end(&mut buffer).unwrap();
-                //println!(format!("{}", buffer.as_slice()));
-                //stream.write(format!("YOU WROTE: {}", buffer));
-            };
-            let mut main_page = Page::new(&main_page);
-
             let mut stream = stream.unwrap();
+
+            println!("Got connection from: {}", stream.peer_addr().unwrap()); //for Admin
+
+            let main_page = &summer_proj::pages::MainPage;
+            let main_page = Page::new(main_page);
+
             main_page.process(&mut stream);
         });
     }

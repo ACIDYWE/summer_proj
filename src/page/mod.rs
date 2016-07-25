@@ -10,7 +10,7 @@ impl<'a> Page<'a>
         Page{ process_fn: f }
     }
 
-    pub fn process(&mut self, stream: &mut TcpStream) -> ()
+    pub fn process(&self, stream: &mut TcpStream) -> ()
     {
         (*self.process_fn)(stream);
     }
