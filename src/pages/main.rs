@@ -9,7 +9,7 @@ pub fn main_page (stream: &mut TcpStream)
                    Wellcome to SHAWERMA\n\
                    Our SHAWERMA best in the world (otvechau)\n\n\
                    Our BEST IN THE WORLD menu:\n\
-                   1. Price list\
+                   1. Price list\n\
                    2. Buy\n\
                    3. Check your luck\n\
                    4. Exit\n").unwrap();
