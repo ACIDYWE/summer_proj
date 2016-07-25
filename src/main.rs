@@ -1,11 +1,11 @@
 extern crate summer_proj;
 
 use std::io::{Read, Write};
-use std::net::TcpListener;
 use summer_proj::ReadlineForTcpStream;
 use std::thread;
+use std::net::TcpListener;
 
-use summer_proj::page::*;
+use summer_proj::page::Page;
 
 //use::std::time::Duration
 //is for sleeps
@@ -25,7 +25,7 @@ fn main() {
             let main_page = &summer_proj::pages::MainPage;
             let main_page = Page::new(main_page);
 
-            main_page.process(&mut stream);
+            main_page.load_for(&mut stream);
         });
     }
 }

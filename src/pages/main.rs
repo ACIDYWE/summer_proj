@@ -1,6 +1,7 @@
 use std::net::TcpStream;
 use std::io::Write;
 use ::ReadlineForTcpStream;
+use ::page::Page;
 
 pub fn main_page (stream: &mut TcpStream)
 {
@@ -21,15 +22,19 @@ pub fn main_page (stream: &mut TcpStream)
         let c = buffer.chars().next().unwrap();
 
         match c {
-            '1' => stream.write(b"your select \"Price list\", but IDITE HAHUI\n").unwrap(),
-            '2' => stream.write(b"your select \"Buy\", but IDITE HAHUI\n").unwrap(),
-            '3' => stream.write(b"your select \"Check your luck\", but IDITE HAHUI\n").unwrap(),
+            '1' => {
+                let price_list = &::pages::PriceList;
+                let price_list = Page::new(price_list);
+                price_list.load_for(stream);
+            },
+            '2' => {stream.write(b"your select \"Buy\", but IDITE HAHUI\n").unwrap();},
+            '3' => {stream.write(b"your select \"Check your luck\", but IDITE HAHUI\n").unwrap();},
             '4' => {
                 stream.write(b"your select \"Exit\", then IDITE HAHUI\n").unwrap();
                 panic!("Kakoito pidor vyshel"); // he he he, bydlo-style mod true
             },
-            _ => stream.write(b"your select smth shit, but IDITE HAHUI\n").unwrap()
+            _ => {stream.write(b"your select smth shit, but IDITE HAHUI\n").unwrap();}
         };
-    }
+    };
 
 }
