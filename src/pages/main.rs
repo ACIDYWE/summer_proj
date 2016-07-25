@@ -5,14 +5,14 @@ use ::page::Page;
 
 pub fn main_page (stream: &mut TcpStream)
 {
-    stream.write(b"Hello pidr!\n").unwrap();
-    stream.write(b"Wellcome to SHAWERMA\n").unwrap();
-    stream.write(b"Our SHAWERMA best in the world (otvechau)\n\n").unwrap();
-    stream.write(b"Our BEST IN THE WORLD menu:\n").unwrap();
-    stream.write(b"1. Price list\n").unwrap();
-    stream.write(b"2. Buy\n").unwrap();
-    stream.write(b"3. Check your luck\n").unwrap();
-    stream.write(b"4. Exit\n").unwrap();
+    stream.write(b"Hello pidr!\n\
+                   Wellcome to SHAWERMA\n\
+                   Our SHAWERMA best in the world (otvechau)\n\n\
+                   Our BEST IN THE WORLD menu:\n\
+                   1. Price list\
+                   2. Buy\n\
+                   3. Check your luck\n\
+                   4. Exit\n").unwrap();
 
     loop {
         stream.write(b"\n> ").unwrap();
