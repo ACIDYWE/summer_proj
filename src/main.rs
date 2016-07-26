@@ -8,7 +8,7 @@ use std::sync::{Arc, Mutex};
 use summer_proj::client::*;
 
 fn main() {
-    let pool = mysql::Pool::new("mysql://root:123456@localhost:3306").unwrap();
+    let pool = mysql::Pool::new("mysql://root:trytolog@localhost:3306").unwrap();
     let pool = Arc::new( Mutex::new(pool) );
     let server = TcpListener::bind("127.0.0.1:31337").unwrap();
     println!("    SERVER STARTED!");
