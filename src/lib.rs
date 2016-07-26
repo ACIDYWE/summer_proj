@@ -1,3 +1,4 @@
+pub mod random;
 pub mod client;
 
 use std::net::TcpStream;
