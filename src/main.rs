@@ -23,7 +23,7 @@ fn main() {
         let pool = pool.clone();
         let client_counter = match client_counter.checked_add(1) {
             Some(_) => {let t = client_counter; client_counter += 1; t},
-            None => {let t = client_counter; client_counter = 0; t}
+            None =>    {let t = client_counter; client_counter  = 0; t}
         };
 
         thread::spawn(move || {
