@@ -4,3 +4,8 @@ version = "0.1.0"
 authors = ["M", "D"]
 
 [dependencies]
+
+[dependencies.mysql]
+version = "*"
+default-features = false
+features = ["socket"]

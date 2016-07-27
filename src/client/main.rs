@@ -17,9 +17,10 @@ impl<'a> MainPage for Client<'a> {
                        Our SHAWERMA best in the world (otvechau)\n\n\
                        Our BEST IN THE WORLD menu:\n\
                        1. Price list\n\
-                       2. Buy\n\
-                       3. Check your luck\n\
-                       4. Exit\n").unwrap();
+                       2. Order\n\
+                       3. Orders history
+                       4. Check your luck\n\
+                       5. Exit\n").unwrap();
 
         loop {
             self.stream.write(b"\n> ").unwrap();
@@ -33,8 +34,11 @@ impl<'a> MainPage for Client<'a> {
                     self.price_list();
                 },
                 '2' => {self.stream.write(b"You'r selected \"Buy\", but IDITE HAHUI\n").unwrap();},
-                '3' => {self.stream.write(b"You'r selected \"Check your luck\", but IDITE HAHUI\n").unwrap();},
-                '4' => {
+                '3' => {
+                    
+                },
+                '4' => {self.stream.write(b"You'r selected \"Check your luck\", but IDITE HAHUI\n").unwrap();},
+                '5' => {
                     self.stream.write(b"You'r selected \"Exit\", then IDITE HAHUI\n").unwrap();
                     panic!("Kakoito pidor vyshel"); // he he he, bydlo-style mod true
                 },
