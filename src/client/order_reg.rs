@@ -18,7 +18,7 @@ struct Order {
 
 impl<'a> OrderRegPage for Client<'a> {
 	fn order_reg(&mut self) -> () {
-		self.stream.write(b"Enter yout order here: ").unwrap();
+		self.stream.write(b"Enter your order here: ").unwrap();
 		let mut buffer = String::new();
 		let len = self.stream.read_line(&mut buffer).unwrap();
 		if len == 0 {
