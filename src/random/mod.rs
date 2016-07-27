@@ -29,13 +29,13 @@ impl Random {
     }
     pub fn rand_u32(&mut self) -> u32
     {
-        let mag01 = self.mag01;  // Lazy
-        let mut mt = self.mt;        // mode
+        let mag01 = &mut self.mag01; // Lazy
+        let mt = &mut self.mt;     // mode
                                  // true
         if self.index >= N { /* generate N words at one time */
             for kk in 0..(N-M) {
-                let y = (mt[kk]&UPPER_MASK)|(mt[kk+1]&LOWER_MASK);
-                mt[kk] = mt[kk+M] ^ (y >> 1) ^ mag01[(y & 0x1u32) as usize];
+                let y: u32 = (mt[kk as usize]&UPPER_MASK)|(mt[(kk+1) as usize]&LOWER_MASK);
+                mt[kk] = mt[(kk+M) as usize] ^ (y >> 1) ^ mag01[(y&1) as usize];
             }
             for kk in (N-M)..(N-1) {
                 let y = (mt[kk]&UPPER_MASK)|(mt[kk+1]&LOWER_MASK);
@@ -46,8 +46,7 @@ impl Random {
 
             self.index = 0;
         }
-
-        let mut y = mt[self.index]; self.index += 1;
+        let mut y: u32 = mt[self.index]; self.index += 1;
         y ^= y >> 11;
         y ^= (y << 7) & 0x9d2c5680u32;
         y ^= (y << 15) & 0xefc60000u32;
