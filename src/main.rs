@@ -1,7 +1,5 @@
 extern crate summer_proj;
 
-use std::io::Write;
-use summer_proj::ReadlineForTcpStream;
 use std::thread;
 use std::net::TcpListener;
 
@@ -23,7 +21,7 @@ fn main() {
             println!("Got connection from: {}", stream.peer_addr().unwrap()); //for Admin
 
             let mut client = Client::new(&mut stream);
-            client.main_page(); 
+            client.main_page();
         });
     }
 }
