@@ -1,5 +1,6 @@
 use super::Client;
 use super::price::PriceListPage;
+use super::orders_list::OrdersListPage;
 
 use std::net::TcpStream;
 use std::io::Write;
@@ -18,7 +19,7 @@ impl<'a> MainPage for Client<'a> {
                        Our BEST IN THE WORLD menu:\n\
                        1. Price list\n\
                        2. Order\n\
-                       3. Orders history
+                       3. Orders history\n\
                        4. Check your luck\n\
                        5. Exit\n").unwrap();
 
@@ -35,7 +36,7 @@ impl<'a> MainPage for Client<'a> {
                 },
                 '2' => {self.stream.write(b"You'r selected \"Buy\", but IDITE HAHUI\n").unwrap();},
                 '3' => {
-                    
+                    self.orders_list();
                 },
                 '4' => {self.stream.write(b"You'r selected \"Check your luck\", but IDITE HAHUI\n").unwrap();},
                 '5' => {
