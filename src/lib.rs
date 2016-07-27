@@ -1,5 +1,4 @@
-pub mod page;
-pub mod pages;
+pub mod client;
 
 use std::net::TcpStream;
 use std::io::Read;
