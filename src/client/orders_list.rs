@@ -19,7 +19,7 @@ impl<'a> OrdersListPage for Client<'a> {
     fn orders_list(&mut self)
     {
         let pool = self.conn.lock().unwrap();
-        self.stream.write( format!("Orders list for connection #{}\n", self.client_id).into_bytes().as_slice() ).unwrap();
+        self.stream.write( format!("Orders list for connection #{}\n", self.client_id).as_bytes() ).unwrap();
 
         let orders: Vec<Order> =
         pool.prep_exec("SELECT * from shawerma.orders WHERE client_id = :id", (self.client_id,))
