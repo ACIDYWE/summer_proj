@@ -13,7 +13,7 @@ fn main() {
     let pool = mysql::Pool::new("mysql://root:123456@localhost:3306").unwrap();
     let pool = Arc::new(Mutex::new(pool));
 
-    let cfg = ServiceConfig{ admin_passwd: String::from("huihuihui") };
+    let cfg = ServiceConfig{ admin_passwd: String::from("$UP@_DUP@_$3CR3T_P@$$") };
     let cfg = Arc::new(Mutex::new(cfg));
 
     let mut next_client_id = 0u8;
