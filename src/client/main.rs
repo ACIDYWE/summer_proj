@@ -20,7 +20,7 @@ impl<'a> MainPage for Client<'a> {
                             Our SHAWERMA best in the world (otvechau)\n\n\
                             Our BEST IN THE WORLD menu:\n\
                             1. Price list\n\
-                            2. Order\n\
+                            2. Get order\n\
                             3. Orders history\n\
                             4. Check your luck\n\
                             5. Exit\n").unwrap();
@@ -39,7 +39,7 @@ impl<'a> MainPage for Client<'a> {
                 '3' => { self.orders_list(); },
                 '4' => { self.check_your_luck(); },
                 '5' => {
-                    self.stream.write(b"C ya!\n").unwrap();
+                    self.stream.write(b"Goodbye!\n").unwrap();
                     panic!("Somebody chosen \"Exit\"!"); 
                 },
                 _ => {continue}
