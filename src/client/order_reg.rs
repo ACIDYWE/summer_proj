@@ -21,6 +21,7 @@ impl<'a> OrderRegPage for Client<'a> {
 		self.stream.write(b"Enter your order here: ").unwrap();
 		let mut buffer = String::new();
 		let len = self.stream.read_line(&mut buffer).unwrap();
+		let buffer = buffer.to_lowercase();
 		if len == 0 {
 			self.stream.write(b"NANANANANA choose something dude!\n").unwrap();
 			return; //return user to the main page
