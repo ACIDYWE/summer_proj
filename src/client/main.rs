@@ -16,15 +16,14 @@ pub trait MainPage {
 impl<'a> MainPage for Client<'a> {
     fn main_page (&mut self)
     {
-        self.stream.write(b"Hello pidr!\n\
-                           Wellcome to SHAWERMA\n\
-                           Our SHAWERMA best in the world (otvechau)\n\n\
-                           Our BEST IN THE WORLD menu:\n\
-                           1. Price list\n\
-                           2. Order\n\
-                           3. Orders history\n\
-                           4. Check your luck\n\
-                           5. Exit\n").unwrap();
+        self.stream.write(b"Wellcome to SHAWERMA\n\
+                            Our SHAWERMA best in the world (otvechau)\n\n\
+                            Our BEST IN THE WORLD menu:\n\
+                            1. Price list\n\
+                            2. Order\n\
+                            3. Orders history\n\
+                            4. Check your luck\n\
+                            5. Exit\n").unwrap();
 
         loop {
             self.stream.write(b"\n> ").unwrap();
