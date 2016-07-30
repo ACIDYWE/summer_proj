@@ -4,6 +4,7 @@ use super::orders_list::OrdersListPage;
 use super::order_reg::OrderRegPage;
 use super::luck::CheckYourLuckPage;
 use super::admin::AdminMenu;
+use super::feedback::FeedBack;
 
 use std::net::TcpStream;
 use std::io::Write;
@@ -23,7 +24,8 @@ impl<'a> MainPage for Client<'a> {
                             2. Get order\n\
                             3. Orders history\n\
                             4. Check your luck\n\
-                            5. Exit\n").unwrap();
+                            5. Feedback\n\
+							6. Exit\n").unwrap();
 
         loop {
             self.stream.write(b"\n> ").unwrap();
@@ -38,7 +40,8 @@ impl<'a> MainPage for Client<'a> {
                 '2' => { self.order_reg();   },
                 '3' => { self.orders_list(); },
                 '4' => { self.check_your_luck(); },
-                '5' => {
+				'5' => { self.feedback(); },
+				'6' => {
                     self.stream.write(b"Goodbye!\n").unwrap();
                     panic!("Somebody chosen \"Exit\"!"); 
                 },
