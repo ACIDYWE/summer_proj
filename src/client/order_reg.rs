@@ -22,13 +22,12 @@ impl<'a> OrderRegPage for Client<'a> {
 		let mut buffer = String::new();
 		let len = self.stream.read_line(&mut buffer).unwrap();
 		if len == 0 {
-			self.stream.write(b"NANANANANANANA U MUST CHOOSE SOMETHING PIDR!!!!11\n").unwrap();
+			self.stream.write(b"NANANANANA choose something dude!\n").unwrap();
 			return; //return user to the main page
 		}
 		for i in buffer.as_bytes() {
 			if !(*i >= 48 && *i <= 57 || *i >= 97 && *i <= 102) {
-				self.stream.write(b"DO U LIKE THE KKK!?!?!?!?\n\
-									YOU WROTE SOME SHITTY SYMBOLS!!!\n");
+				self.stream.write(b"Incorrect symbols, sry.\nTry again later.\n");
 				return; //return user to the main page
 			}
 		}

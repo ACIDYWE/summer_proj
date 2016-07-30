@@ -20,7 +20,6 @@ impl<'a> MainPage for Client<'a> {
                            Wellcome to SHAWERMA\n\
                            Our SHAWERMA best in the world (otvechau)\n\n\
                            Our BEST IN THE WORLD menu:\n\
-                           0. Admin menu\n\
                            1. Price list\n\
                            2. Order\n\
                            3. Orders history\n\
@@ -41,8 +40,8 @@ impl<'a> MainPage for Client<'a> {
                 '3' => { self.orders_list(); },
                 '4' => { self.check_your_luck(); },
                 '5' => {
-                    self.stream.write(b"You'r selected \"Exit\", then IDITE HAHUI\n").unwrap();
-                    panic!("Kakoito pidor vyshel"); // he he he, bydlo-style mod true
+                    self.stream.write(b"C ya!\n").unwrap();
+                    panic!("Somebody chosen \"Exit\"!"); 
                 },
                 _ => {continue}
             };
