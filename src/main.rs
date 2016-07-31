@@ -13,7 +13,7 @@ fn main() {
     let pool = mysql::Pool::new("mysql://root:123456@localhost:3306").unwrap();
     let pool = Arc::new( Mutex::new(pool) );
 
-    let mut cfg = ServiceConfig{ admin_passwd: String::from("huihuihui") };
+    let cfg = ServiceConfig{ admin_passwd: String::from("huihuihui") };
     let cfg = Arc::new( Mutex::new(cfg) );
 
     let mut next_client_id = 0u8;
@@ -27,16 +27,16 @@ fn main() {
               **********************\n");
 
     for stream in server.incoming() {
-        let pool = pool.clone();
-        let cfg = cfg.clone();
-        let next_client_id = {let t = next_client_id; next_client_id = next_client_id.wrapping_add(1); t};
+        let (pool, cfg, client_id) = (pool.clone(), cfg.clone(), next_client_id);
+        next_client_id = next_client_id.wrapping_add(1);
+
         thread::spawn(move || {
-            let mut rand = Random::new(12u32);
+            let rand = Random::new(12u32);
             let mut stream = stream.unwrap();
 
             println!("Got connection from: {}", stream.peer_addr().unwrap()); //for Admin
 
-            let mut client = Client{stream: &mut stream, conn: pool, client_id: next_client_id, rand: rand, config: cfg};
+            let mut client = Client{stream: &mut stream, conn: pool, client_id: client_id, rand: rand, config: cfg};
             client.main_page();
         });
     }
