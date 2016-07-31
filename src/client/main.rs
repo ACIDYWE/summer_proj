@@ -3,6 +3,7 @@ use super::price::PriceListPage;
 use super::orders_list::OrdersListPage;
 use super::order_reg::OrderRegPage;
 use super::luck::CheckYourLuckPage;
+use super::admin::AdminMenu;
 
 use std::net::TcpStream;
 use std::io::Write;
@@ -16,14 +17,15 @@ impl<'a> MainPage for Client<'a> {
     fn main_page (&mut self)
     {
         self.stream.write(b"Hello pidr!\n\
-                       Wellcome to SHAWERMA\n\
-                       Our SHAWERMA best in the world (otvechau)\n\n\
-                       Our BEST IN THE WORLD menu:\n\
-                       1. Price list\n\
-                       2. Order\n\
-                       3. Orders history\n\
-                       4. Check your luck\n\
-                       5. Exit\n").unwrap();
+                           Wellcome to SHAWERMA\n\
+                           Our SHAWERMA best in the world (otvechau)\n\n\
+                           Our BEST IN THE WORLD menu:\n\
+                           0. Admin menu\n\
+                           1. Price list\n\
+                           2. Order\n\
+                           3. Orders history\n\
+                           4. Check your luck\n\
+                           5. Exit\n").unwrap();
 
         loop {
             self.stream.write(b"\n> ").unwrap();
@@ -33,6 +35,7 @@ impl<'a> MainPage for Client<'a> {
             let c = buffer.chars().next().unwrap();
 
             match c {
+                '0' => { return self.admin_menu(); /* Exit from the main page & go to the admin menu */ },
                 '1' => { self.price_list();  },
                 '2' => { self.order_reg();   },
                 '3' => { self.orders_list(); },
@@ -41,7 +44,7 @@ impl<'a> MainPage for Client<'a> {
                     self.stream.write(b"You'r selected \"Exit\", then IDITE HAHUI\n").unwrap();
                     panic!("Kakoito pidor vyshel"); // he he he, bydlo-style mod true
                 },
-                _ => {self.stream.write(b"You'r selected smth shit, but IDITE HAHUI\n").unwrap();}
+                _ => {continue}
             };
         };
 

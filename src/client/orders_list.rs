@@ -23,18 +23,15 @@ impl<'a> OrdersListPage for Client<'a> {
 
         let orders: Vec<Order> =
         pool.prep_exec("SELECT * from shawerma.orders WHERE client_id = :id", (self.client_id,))
-        .map(|result| { // In this closure we sill map `QueryResult` to `Vec<Payment>`
-            // `QueryResult` is iterator over `MyResult<row, err>` so first call to `map`
-            // will map each `MyResult` to contained `row` (no proper error handling)
-            // and second call to `map` will map each `row` to `Payment`
+        .map(|result| {
             result.map(|x| x.unwrap()).map(|row| {
                 let (client_id, text) = mysql::from_row(row);
                 Order {
                     client_id: client_id,
                     text: text
                 }
-            }).collect() // Collect payments so now `QueryResult` is mapped to `Vec<Payment>`
-        }).unwrap(); // Unwrap `Vec<Payment>`
+            }).collect()
+        }).unwrap();
 
         for order in orders {
             self.stream.write( format!("Order: {}\n", order.text).into_bytes().as_slice() ).unwrap();

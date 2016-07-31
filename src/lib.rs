@@ -1,5 +1,6 @@
 pub mod random;
 pub mod client;
+pub mod config;
 
 use std::net::TcpStream;
 use std::io::Read;
