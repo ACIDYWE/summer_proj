@@ -1,0 +1,8 @@
+[package]
+name = "checker"
+version = "0.1.0"
+authors = ["Denis Varlakov <dsurv@yandex.ru>"]
+
+[dependencies]
+time = "0.1"
+rand = "0.3"
