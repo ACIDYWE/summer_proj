@@ -7,7 +7,7 @@ use std::ascii::AsciiExt;
 
 pub use checker::*;
 
-pub const TIME_ROUND: i64 = 30;   // min value 20
+pub const TIME_ROUND: i64 = 3*60;   // min value 20
 pub const TIME_ON_CHECK: i64 = 5; // min value 5
 pub const FLAGS_COUNT: usize = 3; // min value 1
 

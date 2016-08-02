@@ -101,33 +101,63 @@ fn main() {
 
 fn timer_for(mut n: u64)
 {
-    if n > 5 {
+    if n > 60 {
+        if n%30 != 0 {
+            thread::sleep(Duration::new(n%30, 0));
+            n -= n%30;
+        }
+        print!("{}", n); flush();
+        _timer_fn(n, 60, 30, 2);
+        _timer_fn(60, 30, 15, 2);
+        _timer_fn(30, 5, 5, 2);
+        _timer_fn(5, 3, 1, 2);
+        _timer_fn(3, 0, 1, 4);
+    } else if n > 30 {
+        if n%15 != 0 {
+            thread::sleep(Duration::new(n%15, 0));
+            n -= n%15;
+        }
+        print!("{}", n); flush();
+        _timer_fn(n, 30, 15, 2);
+        _timer_fn(30, 5, 5, 2);
+        _timer_fn(5, 0, 1, 4);
+    } else if n > 5 {
         if n%5 != 0 {
             thread::sleep(Duration::new(n%5, 0));
             n -= n%5;
         }
         print!("{}", n); flush();
-        for sec in (5..n).filter(|x| x%5==0).rev() {
-            thread::sleep(Duration::new(2, 500000000));
-            print!("."); flush();
-            thread::sleep(Duration::new(2, 500000000));
-            print!("{}", sec); flush();
-        }
-        n = 5;
+        _timer_fn(n, 5, 5, 2);
+        _timer_fn(5, 0, 1, 4);
+    } else {
+        print!("{}", n); flush();
+        _timer_fn(n, 0, 1, 4);
     }
-    else { print!("{}", n); }
+    println!("");
+}
 
-    for sec in (0..n).rev() {
-        thread::sleep(Duration::new(0, 200000000));
-        print!("."); flush();
-        thread::sleep(Duration::new(0, 200000000));
-        print!("."); flush();
-        thread::sleep(Duration::new(0, 200000000));
-        print!("."); flush();
-        thread::sleep(Duration::new(0, 200000000));
+fn _timer_fn(s: u64, e: u64, step: u64, k: u64)
+{
+    if s == e { return; }
+    assert!(s > e && (s-e)%step == 0 && k > 1);
+
+    let mut t = k;
+    while t&1 == 0 { t >>= 1; }
+    while t%5 == 0 { t /= 5; }
+    assert!(t == 1);
+
+    //let step = (s-e)/n;
+    let (secs, nanos) = (step/k, (1000000000 * (step%k)) / k);
+    let sl_time = Duration::new(secs, nanos as u32);
+
+    for sec in (e..s).filter(|x| (x-e)%step==0).rev() {
+        for _ in 0..(k-1) {
+            thread::sleep(sl_time);
+            print!("."); flush();
+        }
+        thread::sleep(sl_time);
         print!("{}", sec); flush();
     }
-    print!("\n"); flush();
 }
 
 #[inline(always)]
