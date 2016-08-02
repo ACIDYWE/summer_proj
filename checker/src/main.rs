@@ -1,4 +1,5 @@
 extern crate checker;
+extern crate mysql;
 
 use std::io;
 use std::io::Write;
@@ -6,25 +7,12 @@ use std::sync::mpsc::{Receiver, channel};
 use std::thread;
 use std::time::Duration;
 
-pub use checker::{Checker, CheckerWatch, CheckerErr, CheckerResult, WatchResult, CheckerProcess, CheckerWatchProcess, TIME_ROUND, TIME_ON_CHECK};
+use checker::{Checker, CheckerWatch, CheckerErr, CheckerResult, WatchResult, CheckerProcess, CheckerWatchProcess, TIME_ROUND, TIME_ON_CHECK};
+use checker::db::*;
 
 fn main() {
+    let pool = mysql::Pool::new("mysql://root:123456@localhost:3306").unwrap();
 
-    // Считываем адреса сервисов. Пустая
-    // строка — признак конца списка.
-    let mut addrs: Vec<String> = Vec::new();
-    loop {
-        let mut addr = String::new();
-        io::stdin().read_line(&mut addr).unwrap();
-
-        let (addr, _) = addr.split_at(addr.len()-1); // stdin().read_line(..) возвращает
-        let addr = String::from(addr);               // строку вместе с '\n', лол
-
-        if addr.len() == 0 { break; }
-        addrs.push(addr);
-    }
-
-    let addrs = addrs; // В дальнейшем не предполагается изменение списка сервисов
     let mut round = 0usize;
 
     // Начинаем раунд...
@@ -32,11 +20,16 @@ fn main() {
         round += 1;
         println!("          === Начало {n} раунда ===", n=round);
 
+        println!("Получаю список сервисов...");
+        let addrs = get_addrs(&pool);
+        println!("Выгружено {} сервисов:", addrs.len());
+        for &(_,ref addr) in &addrs { println!("{}", addr); }
+
         print!("\nПровожу проверки чекера: "); flush();
 
         let mut rx: Vec< Receiver<CheckerResult> > = Vec::new();
 
-        for addr in &addrs {
+        for &(_,ref addr) in &addrs {
             let mut checker = Checker{addr: addr.clone()};
             let (t, r) = channel::<CheckerResult>();
             rx.push(r);
@@ -58,10 +51,10 @@ fn main() {
 
             match result {
                 Ok(res) => {
-                    println!("{}\t— проверки чекера прошёл", addrs[i]);
+                    println!("{}\t— проверки чекера прошёл", addrs[i].1);
                     watchers.push((i,res));
                 },
-                Err(e) => println!("{}\t— {:?}", addrs[i], e)
+                Err(e) => println!("{}\t— {:?}", addrs[i].1, e)
             };
         }
 
@@ -90,8 +83,8 @@ fn main() {
 
             match result {
                 Ok(_) => (),
-                Err(CheckerErr::ServerOffline) => println!("{}\t— was offline", addrs[i]),
-                Err(e) => println!("{}\t— {:?}", addrs[i], e)
+                Err(CheckerErr::ServerOffline) => println!("{}\t— was offline", addrs[i].1),
+                Err(e) => println!("{}\t— {:?}", addrs[i].1, e)
             }
         }
 
