@@ -1,5 +1,3 @@
-extern crate time;
-
 use super::{CheckerWatch, WatchResult, CheckerErr};
 
 use ::TIME_ROUND;
@@ -27,17 +25,13 @@ pub trait CheckerWatchProcess
     fn watch_and_send(&mut self, send: Sender<WatchResult>) -> ();
 }
 
-#[inline(always)]
-fn get_time() -> i64 {time::now().to_timespec().sec}
-
 impl CheckerWatchProcess for CheckerWatch
 {
     fn watch(&mut self) -> WatchResult
     {
-        let start_time = get_time();
+        let n = TIME_ROUND/2 - 2;
 
-        loop {
-            if get_time() - start_time >= TIME_ROUND-10 { break; }
+        for _ in 0..n {
 
             // Выбираем 3 пункт меню (Orders history)
             match self.stream.write(b"3\n") {
@@ -70,7 +64,7 @@ impl CheckerWatchProcess for CheckerWatch
             // Начинаем считывать историю заказов
             loop {
 
-                // Считываем первые 2 байта. Если это "> ",
+                // Считываем первые 3 байта. Если это "\n> ",
                 // значит вывод заказов окончен.
                 let mut buf = [0u8; 3];
                 match self.stream.read_exact(&mut buf) {
@@ -80,7 +74,7 @@ impl CheckerWatchProcess for CheckerWatch
 
                 if &buf == b"\n> " {break}
 
-                // Окей, это не те два байта. Тогда считаем
+                // Окей, это не те три байта. Тогда считаем
                 // строку до конца и объеденим.
 
                 let mut buf = String::from_utf8(buf.to_vec()).unwrap();
@@ -116,7 +110,7 @@ impl CheckerWatchProcess for CheckerWatch
                 if x == false { return Err(CheckerErr::FlagLost) }
             }
 
-            thread::sleep(Duration::new(5, 0)); // sleep for 5 sec 0 nanosec
+            thread::sleep(Duration::new(2, 0)); // sleep for 5 sec 0 nanosec
         }
 
         Ok(())

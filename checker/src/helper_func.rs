@@ -50,8 +50,8 @@ pub fn line_check(stream: &mut TcpStream, line: &str) -> Result<bool, ReadlineEr
 
 // Вызывает последовательно с каждой строкой из lines функцию
 // line_check(stream, line), если очередной вызов вернул Ok(false),
-// ф-ция вернёт Ok(false), если очередной вызов вернул Err(()),
-// ф-ция вернёт Ok(()). Т.о. ф-ция вернёт Ok(true) если каждый вызов
+// ф-ция вернёт Ok(false), если очередной вызов вернул Err(e),
+// ф-ция вернёт Err(e). Т.о. ф-ция вернёт Ok(true) если каждый вызов
 // line_check(stream, line) вернёт Ok(true)
 pub fn lines_check(stream: &mut TcpStream, lines: &[&str]) -> Result<bool, ReadlineError>
 {

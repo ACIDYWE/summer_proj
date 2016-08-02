@@ -18,7 +18,7 @@ fn main() {
         io::stdin().read_line(&mut addr).unwrap();
 
         let (addr, _) = addr.split_at(addr.len()-1); // stdin().read_line(..) возвращает
-        let addr = String::from(addr);               // строку вместе в '\n', лол
+        let addr = String::from(addr);               // строку вместе с '\n', лол
 
         if addr.len() == 0 { break; }
         addrs.push(addr);
