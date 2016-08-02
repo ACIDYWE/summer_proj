@@ -28,7 +28,7 @@ impl<'a> OrderRegPage for Client<'a> {
 		}
 		for i in buffer.as_bytes() {
 			if !(*i >= 48 && *i <= 57 || *i >= 97 && *i <= 102) {
-				self.stream.write(b"Incorrect symbols, sry.\nTry again later.\n");
+				self.stream.write(b"Incorrect symbols, sry.\nTry again later.\n").unwrap();
 				return; //return user to the main page
 			}
 		}
