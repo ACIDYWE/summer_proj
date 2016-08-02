@@ -6,3 +6,8 @@ authors = ["Denis Varlakov <dsurv@yandex.ru>"]
 [dependencies]
 time = "0.1"
 rand = "0.3"
+
+[dependencies.mysql]
+version = "*"
+default-features = false
+features = ["socket"]
