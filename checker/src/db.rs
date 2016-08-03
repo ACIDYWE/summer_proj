@@ -1,22 +1,28 @@
 extern crate mysql;
 
-struct Service {
-    id: u64,
-    ip: String,
-    name: String,
-    token: String,
-    points: u64
-}
+use ::CheckerErr;
 
 pub fn get_addrs(pool: &mysql::Pool) -> Vec<(u64, String)>
 {
-    let services: Vec<Service> = pool.prep_exec("SELECT * FROM `checker`.`services`", ())
+    pool.prep_exec("SELECT * FROM `checker`.`services`", ())
     .map(|result| {
         result.map(|x| x.unwrap()).map(|row| {
 
-            let (id, ip, name, token, points) = mysql::from_row(row);
-            Service{id: id, ip: ip, name: name, token: token, points: points}
+            let (id, ip, _, _, _) = mysql::from_row::<(u64,String,String,String,i64)>(row);
+            (id, ip)
         }).collect()
-    }).unwrap();
-    services.iter().map(|s| (s.id, s.ip.clone())).collect()
+    }).unwrap()
+}
+
+pub fn give_penalty(pool: &mysql::Pool, service_id: u64, peny: u32, reason: &CheckerErr)
+{
+    pool.prep_exec("UPDATE `checker`.`services` SET `points`=`points`-:peny WHERE `id` = :service",
+                   (mysql::Value::from(peny), mysql::Value::from(service_id))).unwrap();
+    pool.prep_exec("INSERT INTO `checker`.`log`(`id`, `service_id`, `event`, `points`) VALUES (0,:service,:event,:peny)",
+                   (
+                       mysql::Value::from(service_id),
+                       mysql::Value::from(format!("{:?}",reason)),
+                       mysql::Value::from(-(peny as i64))
+                   )
+                  ).unwrap();
 }

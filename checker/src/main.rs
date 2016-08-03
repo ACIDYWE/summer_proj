@@ -10,6 +10,8 @@ use std::time::Duration;
 use checker::{Checker, CheckerWatch, CheckerErr, CheckerResult, WatchResult, CheckerProcess, CheckerWatchProcess, TIME_ROUND, TIME_ON_CHECK};
 use checker::db::*;
 
+const PENALTY: u32 = 40;
+
 fn main() {
     let pool = mysql::Pool::new("mysql://root:123456@localhost:3306").unwrap();
 
@@ -54,7 +56,10 @@ fn main() {
                     println!("{}\t— проверки чекера прошёл", addrs[i].1);
                     watchers.push((i,res));
                 },
-                Err(e) => println!("{}\t— {:?}", addrs[i].1, e)
+                Err(e) => {
+                    give_penalty(&pool, addrs[i].0, PENALTY, &e);
+                    println!("{}\t— {:?}", addrs[i].1, e);
+                }
             };
         }
 
@@ -83,8 +88,14 @@ fn main() {
 
             match result {
                 Ok(_) => (),
-                Err(CheckerErr::ServerOffline) => println!("{}\t— was offline", addrs[i].1),
-                Err(e) => println!("{}\t— {:?}", addrs[i].1, e)
+                Err(CheckerErr::ServerOffline) => {
+                    give_penalty(&pool, addrs[i].0, PENALTY, &CheckerErr::ServerOffline);
+                    println!("{}\t— was offline", addrs[i].1);
+                },
+                Err(e) => {
+                    give_penalty(&pool, addrs[i].0, PENALTY, &e);
+                    println!("{}\t— {:?}", addrs[i].1, e);
+                }
             }
         }
 
@@ -102,9 +113,7 @@ fn timer_for(mut n: u64)
         print!("{}", n); flush();
         _timer_fn(n, 60, 30, 2);
         _timer_fn(60, 30, 15, 2);
-        _timer_fn(30, 5, 5, 2);
-        _timer_fn(5, 3, 1, 2);
-        _timer_fn(3, 0, 1, 4);
+        _timer_fn(30, 0, 5, 2);
     } else if n > 30 {
         if n%15 != 0 {
             thread::sleep(Duration::new(n%15, 0));
