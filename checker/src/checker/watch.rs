@@ -110,7 +110,7 @@ impl CheckerWatchProcess for CheckerWatch
                 if x == false { return Err(CheckerErr::FlagLost) }
             }
 
-            thread::sleep(Duration::new(2, 0)); // sleep for 5 sec 0 nanosec
+            thread::sleep(Duration::new(2, 0)); // sleep for 2 sec 0 nanosec
         }
 
         Ok(())

@@ -37,6 +37,21 @@ macro_rules! checker_test_try {
     };
 }
 
+// Принимает один аргумент. Если это std::io::Error, делает
+// return Err(ReadlineError::ConnectionLost)
+#[macro_export]
+macro_rules! checker_test_write_try {
+    ( $x:expr ) => {
+        {
+            use ::ReadlineError;
+            match $x {
+                Ok(_) => (),
+                Err(_) => return Err(ReadlineError::ConnectionLost),
+            };
+        }
+    };
+}
+
 // Получает из stream строку и если она совпадает с line,
 // возвращает Ok(true), в ином случае - Ok(false). Если
 // при обращении к stream.read_line(..) возникла ошибка,

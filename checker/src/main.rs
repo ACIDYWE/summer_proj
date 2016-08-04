@@ -25,14 +25,14 @@ fn main() {
         println!("Получаю список сервисов...");
         let addrs = get_addrs(&pool);
         println!("Выгружено {} сервисов:", addrs.len());
-        for &(_,ref addr) in &addrs { println!("{}", addr); }
+        for service in &addrs { println!("{}\t— {}", service.ip, service.name); }
 
         print!("\nПровожу проверки чекера: "); flush();
 
         let mut rx: Vec< Receiver<CheckerResult> > = Vec::new();
 
-        for &(_,ref addr) in &addrs {
-            let mut checker = Checker{addr: addr.clone()};
+        for service in &addrs {
+            let mut checker = Checker{addr: service.ip.clone()};
             let (t, r) = channel::<CheckerResult>();
             rx.push(r);
 
@@ -43,6 +43,7 @@ fn main() {
 
         timer_for(TIME_ON_CHECK as u64);
 
+        spoil_flags(&pool);
         let mut watchers: Vec<(usize, CheckerWatch)> = Vec::new();
 
         for (i, r) in (&rx).iter().enumerate() {
@@ -53,12 +54,15 @@ fn main() {
 
             match result {
                 Ok(res) => {
-                    println!("{}\t— проверки чекера прошёл", addrs[i].1);
+                    println!("{} ({}) — проверки чекера прошёл", addrs[i].ip, addrs[i].name);
+                    for flag in &res.flags {
+                        reg_flag(&pool, flag.clone(), addrs[i].id); // TODO: optimize it
+                    }
                     watchers.push((i,res));
                 },
                 Err(e) => {
-                    give_penalty(&pool, addrs[i].0, PENALTY, &e);
-                    println!("{}\t— {:?}", addrs[i].1, e);
+                    give_penalty(&pool, addrs[i].id, PENALTY, &e);
+                    println!("{} ({}) — {:?}", addrs[i].ip, addrs[i].name, e);
                 }
             };
         }
@@ -89,12 +93,12 @@ fn main() {
             match result {
                 Ok(_) => (),
                 Err(CheckerErr::ServerOffline) => {
-                    give_penalty(&pool, addrs[i].0, PENALTY, &CheckerErr::ServerOffline);
-                    println!("{}\t— was offline", addrs[i].1);
+                    give_penalty(&pool, addrs[i].id, PENALTY, &CheckerErr::ServerOffline);
+                    println!("{} ({}) — was offline", addrs[i].ip, addrs[i].name);
                 },
                 Err(e) => {
-                    give_penalty(&pool, addrs[i].0, PENALTY, &e);
-                    println!("{}\t— {:?}", addrs[i].1, e);
+                    give_penalty(&pool, addrs[i].id, PENALTY, &e);
+                    println!("{} ({}) — {:?}", addrs[i].ip, addrs[i].name, e);
                 }
             }
         }
