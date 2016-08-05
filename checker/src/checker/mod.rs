@@ -24,6 +24,7 @@ pub enum CheckerErr {
     BadGetOrder,
     BadOrderHistory,
     BadCheckYourLuck,
+    BadFeedback,
     ServerOffline,
     UnicodeDetected,
     FlagLost,

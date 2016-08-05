@@ -37,6 +37,8 @@ impl CheckerProcess for Checker
         checker_try!(self.test_main_menu(&mut stream), CheckerErr::BadMainMenu);
         //...........<    выражение для обработки   >..[return it if Ok(false)]
         checker_try!(self.test_price_list(&mut stream), CheckerErr::BadPriceList);
+        checker_try!(self.test_feedback(&mut stream), CheckerErr::BadFeedback);
+        checker_try!(self.test_admin_menu(&mut stream), CheckerErr::BadAdminLogIn);
 
         // etc.
 

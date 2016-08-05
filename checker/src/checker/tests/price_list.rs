@@ -6,9 +6,6 @@ use std::io::Write;
 use ::ReadlineError;
 
 pub trait PriceListTest {
-    // По self.stream на момент вызова не должно
-    // быть считано ни байта с момента открытия
-    // соединения.
     fn test_price_list(&mut self, stream: &mut TcpStream) -> Result<bool, ReadlineError>;
 }
 
