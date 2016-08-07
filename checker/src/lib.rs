@@ -23,18 +23,18 @@ pub trait ReadlineForTcpStream {
 }
 
 impl ReadlineForTcpStream for TcpStream {
-    fn read_line(&mut self, buf: &mut String) -> Result<usize, ReadlineError> {      //reading until new line
-        let mut c: [u8;1] = [0;1];
+    fn read_line(&mut self, buf: &mut String) -> Result<usize, ReadlineError> {
+        let mut c = [0u8];
         let mut readen = 0;
-        self.read_exact(&mut c).unwrap();
-        while c[0] != 10 {
-            if !c[0].is_ascii() {return Err(ReadlineError::NotAscii);}
-            readen+=1;
-            (*buf).push(c[0] as char);
-            match self.read_exact(&mut c) {
-                Ok(_) => (),
-                Err(_) => return Err(ReadlineError::ConnectionLost)
+        loop {
+            if let Err(_) = self.read_exact(&mut c) {
+                return Err(ReadlineError::ConnectionLost);
             }
+            if c[0] == 10 { break; }
+
+            if !c[0].is_ascii() { return Err(ReadlineError::NotAscii); }
+            buf.push(c[0] as char);
+            readen += 1;
         }
         Ok(readen)
     }
