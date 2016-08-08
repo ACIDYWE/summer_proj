@@ -10,7 +10,7 @@ use std::time::Duration;
 use checker::{Checker, CheckerWatch, CheckerErr, CheckerResult, WatchResult, CheckerProcess, CheckerWatchProcess, TIME_ROUND, TIME_ON_CHECK};
 use checker::db::*;
 
-const PENALTY: u32 = 40;
+const PENALTY: u32 = 25;
 
 fn main() {
     let pool = mysql::Pool::new("mysql://root:123456@localhost:3306").unwrap();
